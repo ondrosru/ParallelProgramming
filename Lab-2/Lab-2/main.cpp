@@ -82,12 +82,12 @@ void Blur(char* inputImgName, char* outputImageName, int threadCount, int coresC
 		endRow += divider.quot;
 	}
 
-	const DWORD_PTR mask = (1 << coresCount) - 1;
+	int mask = (1 << coresCount) - 1;
 	HANDLE* handles = new HANDLE[threadCount];
 	for ( int i = 0; i < threadCount; i++ )
 	{
 		handles[i] = CreateThread( NULL, 0, &ThreadProc, &threadData[i], CREATE_SUSPENDED, NULL );
-		SetProcessAffinityMask( handles[i], mask );
+		SetThreadAffinityMask( handles[i], mask );
 	}
 
 	for ( int i = 0; i < threadCount; i++ )
